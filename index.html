@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Люблю ❤</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #07070c;
+      font-family: 'Segoe UI', 'Inter', system-ui, sans-serif;
+      padding: 24px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: -20%;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255, 0, 128, 0.4), transparent 45%),
+        radial-gradient(circle at 80% 80%, rgba(0, 200, 255, 0.35), transparent 45%);
+      filter: blur(70px);
+      animation: floatBg 14s ease-in-out infinite alternate;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    @keyframes floatBg {
+      0%   { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(3%, -3%) scale(1.08); }
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+      padding: 46px 42px 40px;
+      border-radius: 34px;
+      background: rgba(15, 15, 22, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      box-shadow:
+        0 0 0 1px rgba(255, 0, 128, 0.15),
+        0 40px 90px -30px rgba(255, 0, 128, 0.5),
+        0 0 110px -30px rgba(0, 200, 255, 0.4);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .scan-text {
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #b8b8cc;
+      text-align: center;
+    }
+
+    .qr-frame {
+      position: relative;
+      padding: 18px;
+      border-radius: 24px;
+      background: #ffffff;
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.1),
+        0 0 40px -6px rgba(255, 0, 128, 0.65),
+        0 0 80px -20px rgba(0, 200, 255, 0.5);
+    }
+
+    .qr-frame::before,
+    .qr-frame::after {
+      content: '';
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border: 3px solid #ff007f;
+      filter: drop-shadow(0 0 8px rgba(255, 0, 128, 1));
+    }
+    .qr-frame::before {
+      top: -8px; left: -8px;
+      border-right: none; border-bottom: none;
+      border-top-left-radius: 14px;
+    }
+    .qr-frame::after {
+      bottom: -8px; right: -8px;
+      border-left: none; border-top: none;
+      border-bottom-right-radius: 14px;
+    }
+
+    #qrcode { line-height: 0; }
+    #qrcode img, #qrcode canvas {
+      display: block;
+      width: 240px !important;
+      height: 240px !important;
+      image-rendering: crisp-edges;
+      border-radius: 12px;
+    }
+
+    .love-text {
+      font-size: 4rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      line-height: 1;
+      background: linear-gradient(100deg, #ff007f 0%, #ff4da6 45%, #00d4ff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      user-select: none;
+      animation: glowPulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes glowPulse {
+      0%, 100% { filter: drop-shadow(0 0 12px rgba(255, 0, 128, 0.8)); }
+      50%      { filter: drop-shadow(0 0 30px rgba(0, 212, 255, 1)); }
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 30px 22px 28px; border-radius: 26px; gap: 22px; }
+      #qrcode img, #qrcode canvas { width: 200px !important; height: 200px !important; }
+      .love-text { font-size: 3rem; }
+      .scan-text { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="scan-text">Отсканируй</div>
+    <div class="qr-frame">
+      <div id="qrcode"></div>
+    </div>
+    <div class="love-text">Люблю</div>
+  </div>
+
+  <script>
+    (function() {
+      const VIDEO_URL = 'https://vkvideo.ru/video-220018529_456247536?t=55m50s';
+
+      const qrContainer = document.getElementById('qrcode');
+      qrContainer.innerHTML = '';
+
+      new QRCode(qrContainer, {
+        text: VIDEO_URL,
+        width: 240,
+        height: 240,
+        colorDark: '#07070c',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H
+      });
+
+      setTimeout(() => {
+        const el = qrContainer.querySelector('img') || qrContainer.querySelector('canvas');
+        if (el) {
+          el.style.cursor = 'pointer';
+          el.addEventListener('click', () => {
+            window.open(VIDEO_URL, '_blank', 'noopener,noreferrer');
+          });
+        }
+      }, 60);
+    })();
+  </script>
+</body>
+</html>
